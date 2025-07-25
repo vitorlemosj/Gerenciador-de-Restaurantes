@@ -1,6 +1,6 @@
-package java.model; 
+package model; 
 
-import java.util.StatusAtendimento;
+import util.StatusAtendimento;
 
 public class Pedido {
     private String descricao;
