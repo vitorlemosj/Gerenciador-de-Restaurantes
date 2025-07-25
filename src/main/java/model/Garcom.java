@@ -1,3 +1,6 @@
+package model; 
+
+import util.StatusAtendimento;
 import java.util.LinkedList;
 import java.util.Queue;
 
