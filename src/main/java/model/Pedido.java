@@ -1,3 +1,7 @@
+package model;
+
+import util.StatusAtendimento;
+
 public class Pedido {
     private String descricao;
 
