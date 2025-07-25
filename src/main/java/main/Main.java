@@ -1,3 +1,11 @@
+package main; 
+
+import model.Garcom;
+import model.GrupoClientes;
+import model.Restaurante;
+import util.StatusAtendimento; 
+import model.Pedido;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
