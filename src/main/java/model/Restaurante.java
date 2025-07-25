@@ -1,6 +1,6 @@
-package java.model; 
+package model; 
 
-import java.util.StatusAtendimento;
+import util.StatusAtendimento;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collections;
