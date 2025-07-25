@@ -1,3 +1,5 @@
+package util;
+
 public enum StatusAtendimento {
     AGUARDANDO_CHEGADA("Aguardando Chegada"),
     AGUARDANDO_PEDIDO("Aguardando Anotação do Pedido"),
