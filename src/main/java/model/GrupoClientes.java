@@ -1,6 +1,6 @@
-package model; 
+package java.model; 
 
-import util.StatusAtendimento;
+import java.util.StatusAtendimento;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
