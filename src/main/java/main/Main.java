@@ -1,10 +1,10 @@
-package java.main; 
+package main; 
 
-import java.model.Garcom;
-import java.model.GrupoClientes;
-import java.model.Restaurante;
-import java.util.StatusAtendimento; 
-import java.model.Pedido;
+import model.Garcom;
+import model.GrupoClientes;
+import model.Restaurante;
+import util.StatusAtendimento; 
+import model.Pedido;
 
 import java.util.ArrayList;
 import java.util.List;
