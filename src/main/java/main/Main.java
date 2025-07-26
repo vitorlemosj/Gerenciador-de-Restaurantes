@@ -1,12 +1,13 @@
-package main; 
+package main;
 
 import model.Garcom;
 import model.GrupoClientes;
 import model.Restaurante;
-import util.StatusAtendimento; 
+import util.StatusAtendimento;
 import model.Pedido;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -28,38 +29,43 @@ public class Main {
 
         while (true) {
             exibirMenu();
-            int opcao = scanner.nextInt();
-            scanner.nextLine(); // Consumir nova linha
+            try {
+                int opcao = scanner.nextInt();
+                scanner.nextLine(); // Consumir nova linha
 
-            switch (opcao) {
-                case 1:
-                    System.out.print("Informe a quantidade de pessoas no grupo: ");
-                    int pessoas = scanner.nextInt();
-                    restaurante.chegadaDeGrupo(new GrupoClientes(pessoas));
-                    break;
-                case 2:
-                    adicionarPedido(restaurante, scanner);
-                    break;
-                case 3:
-                    atualizarStatusGrupo(restaurante, scanner);
-                    break;
-                case 4:
-                    finalizarAtendimento(restaurante, scanner);
-                    break;
-                case 5:
-                    restaurante.exibirStatusGeral();
-                    break;
-                case 6:
-                    System.out.print("Informe o tempo limite de espera em minutos para o alerta: ");
-                    long limite = scanner.nextLong();
-                    restaurante.verificarTemposDeEspera(limite);
-                    break;
-                case 0:
-                    System.out.println("Encerrando o sistema.");
-                    scanner.close();
-                    return;
-                default:
-                    System.out.println("Opção inválida. Tente novamente.");
+                switch (opcao) {
+                    case 1:
+                        System.out.print("Informe a quantidade de pessoas no grupo: ");
+                        int pessoas = scanner.nextInt();
+                        restaurante.chegadaDeGrupo(new GrupoClientes(pessoas));
+                        break;
+                    case 2:
+                        adicionarPedido(restaurante, scanner);
+                        break;
+                    case 3:
+                        atualizarStatusGrupo(restaurante, scanner);
+                        break;
+                    case 4:
+                        finalizarAtendimento(restaurante, scanner);
+                        break;
+                    case 5:
+                        restaurante.exibirStatusGeral();
+                        break;
+                    case 6:
+                        System.out.print("Informe o tempo limite de espera em minutos para o alerta: ");
+                        long limite = scanner.nextLong();
+                        restaurante.verificarTemposDeEspera(limite);
+                        break;
+                    case 0:
+                        System.out.println("Encerrando o sistema.");
+                        scanner.close();
+                        return;
+                    default:
+                        System.out.println("Opção inválida. Tente novamente.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Erro: Entrada inválida. Por favor, digite um número correspondente à opção desejada.");
+                scanner.nextLine(); // Limpa o buffer do scanner para evitar um loop infinito
             }
         }
     }
@@ -84,42 +90,52 @@ public class Main {
     }
 
     private static void adicionarPedido(Restaurante restaurante, Scanner scanner) {
-        System.out.print("Informe o ID do grupo para adicionar o pedido: ");
-        int idGrupo = scanner.nextInt();
-        scanner.nextLine();
+        try {
+            System.out.print("Informe o ID do grupo para adicionar o pedido: ");
+            int idGrupo = scanner.nextInt();
+            scanner.nextLine(); // Consumir a nova linha
 
-        Optional<GrupoClientes> grupoOpt = encontrarGrupoPorId(restaurante, idGrupo);
-        if (grupoOpt.isPresent()) {
-            System.out.print("Digite a descrição do pedido: ");
-            String descPedido = scanner.nextLine();
-            grupoOpt.get().adicionarPedido(new Pedido(descPedido));
-            grupoOpt.get().setStatus(StatusAtendimento.PEDIDO_ANOTADO);
-        } else {
-            System.out.println("Grupo com ID " + idGrupo + " não encontrado em atendimento.");
+            Optional<GrupoClientes> grupoOpt = encontrarGrupoPorId(restaurante, idGrupo);
+            if (grupoOpt.isPresent()) {
+                System.out.print("Digite a descrição do pedido: ");
+                String descPedido = scanner.nextLine();
+                grupoOpt.get().adicionarPedido(new Pedido(descPedido));
+                grupoOpt.get().setStatus(StatusAtendimento.PEDIDO_ANOTADO);
+            } else {
+                System.out.println("Grupo com ID " + idGrupo + " não encontrado em atendimento.");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Erro: ID do grupo deve ser um número.");
+            scanner.nextLine(); // Limpa o buffer
         }
     }
 
     private static void atualizarStatusGrupo(Restaurante restaurante, Scanner scanner) {
-        System.out.print("Informe o ID do grupo para atualizar o status: ");
-        int idGrupo = scanner.nextInt();
-        scanner.nextLine();
+        try {
+            System.out.print("Informe o ID do grupo para atualizar o status: ");
+            int idGrupo = scanner.nextInt();
+            scanner.nextLine(); // Consumir a nova linha
 
-        Optional<GrupoClientes> grupoOpt = encontrarGrupoPorId(restaurante, idGrupo);
-        if (grupoOpt.isPresent()) {
-            System.out.println("Selecione o novo status:");
-            for (StatusAtendimento s : StatusAtendimento.values()) {
-                System.out.println(s.ordinal() + ". " + s.getDescricao());
-            }
-            System.out.print(">> ");
-            int statusIndex = scanner.nextInt();
-            scanner.nextLine();
-            if (statusIndex >= 0 && statusIndex < StatusAtendimento.values().length) {
-                grupoOpt.get().setStatus(StatusAtendimento.values()[statusIndex]);
+            Optional<GrupoClientes> grupoOpt = encontrarGrupoPorId(restaurante, idGrupo);
+            if (grupoOpt.isPresent()) {
+                System.out.println("Selecione o novo status:");
+                for (StatusAtendimento s : StatusAtendimento.values()) {
+                    System.out.println(s.ordinal() + ". " + s.getDescricao());
+                }
+                System.out.print(">> ");
+                int statusIndex = scanner.nextInt();
+                scanner.nextLine();
+                if (statusIndex >= 0 && statusIndex < StatusAtendimento.values().length) {
+                    grupoOpt.get().setStatus(StatusAtendimento.values()[statusIndex]);
+                } else {
+                    System.out.println("Índice de status inválido.");
+                }
             } else {
-                System.out.println("Índice de status inválido.");
+                System.out.println("Grupo com ID " + idGrupo + " não encontrado em atendimento.");
             }
-        } else {
-            System.out.println("Grupo com ID " + idGrupo + " não encontrado em atendimento.");
+        } catch (InputMismatchException e) {
+            System.out.println("Erro: ID do grupo e o status devem ser números.");
+            scanner.nextLine(); // Limpa o buffer
         }
     }
 
